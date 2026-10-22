@@ -1,0 +1,33 @@
+.venv/
+__pycache__/
+*.pyc
+build/
+dist/
+*.spec
+.DS_Store
+*.dmg
+/dist/*.exe
+*.deb
+*.AppImage
+*.keys
+prod.keys
+title.keys
+
+# Upstream source checked out only during builds
+/build/upstream/
+
+# Archivos privados
+prod.keys
+title.keys
+*.nsp
+*.xci
+*.nca
+*_extraido/
+
+# Archivos temporales
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+build/
+dist/

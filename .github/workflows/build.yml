@@ -1,0 +1,59 @@
+name: Build installers (Windows macOS Linux)
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+jobs:
+  macos:
+    runs-on: macos-15-arm64
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build DMG with bundled macOS ARM64 hactool
+        run: bash scripts/build_macos.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HactoolGUI-macOS-ARM64-DMG
+          path: dist/*.dmg
+  linux:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install build dependencies
+        run: sudo apt-get update && sudo apt-get install -y build-essential git libgl1 libegl1 libxkbcommon0
+      - name: Build Debian package
+        run: bash scripts/build_linux.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HactoolGUI-Linux-amd64-DEB
+          path: dist/*.deb
+  windows:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Package Windows application
+        shell: pwsh
+        run: ./scripts/build_windows.ps1
+      - name: Build setup EXE using Inno Setup
+        shell: pwsh
+        run: |
+          $iscc = 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe'
+          if (!(Test-Path $iscc)) { throw 'Inno Setup no encontrado en runner' }
+          & $iscc scripts\installer_windows.iss
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HactoolGUI-Windows-x64-EXE
+          path: |
+            dist/*Setup.exe
+            dist/HactoolGUI.exe
