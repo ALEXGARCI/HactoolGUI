@@ -1,3 +1,9 @@
+<div align="center">
+
+<img src="assets/icon.png" alt="Hactool GUI Logo" width="180">
+
+</div>
+
 # Hactool GUI 3.6 — ALEX GARCI
 
 Aplicación gráfica para macOS Apple Silicon, Windows x64 y Linux x64. Interfaz Qt/PySide6 con temas azul oscuro y claro. El ejecutable **hactool viene dentro de este repositorio** y se empaqueta en el instalador: el usuario final no instala hactool, Python ni Qt.
